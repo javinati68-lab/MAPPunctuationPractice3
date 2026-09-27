@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. Rocha’s English Class: MAP English Test Practice 3</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SortableJS for Drag and Drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .shiny-blue-border {
+            border: 2px solid #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5), inset 0 0 5px rgba(59, 130, 246, 0.2);
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .shiny-blue-border:focus {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8), inset 0 0 8px rgba(59, 130, 246, 0.4);
+            outline: none;
+        }
+
+        .correct-answer { border-color: #22c55e !important; background-color: rgba(34, 197, 94, 0.1); }
+        .incorrect-answer { border-color: #ef4444 !important; background-color: rgba(239, 68, 68, 0.1); }
+        
+        .dark .correct-answer { background-color: rgba(34, 197, 94, 0.2); }
+        .dark .incorrect-answer { background-color: rgba(239, 68, 68, 0.2); }
+
+        /* Drag and drop styles */
+        .draggable-word {
+            cursor: grab;
+            user-select: none;
+        }
+        .draggable-word:active { cursor: grabbing; }
+        .sortable-ghost { opacity: 0.4; background-color: #e5e7eb; }
+        .dark .sortable-ghost { background-color: #374151; }
+
+        .drop-zone {
+            min-height: 40px;
+            border: 2px dashed #9ca3af;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            transition: all 0.2s;
+        }
+        .drop-zone.active { border-color: #3b82f6; background-color: rgba(59, 130, 246, 0.1); }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; color: black; }
+            .no-print, #nav-buttons, #theme-toggle, #progress-container { display: none !important; }
+            .section-container { display: block !important; page-break-inside: avoid; margin-bottom: 20px; box-shadow: none; border: none; padding: 0;}
+            #section-results { display: block !important; page-break-before: always; }
+            canvas { max-width: 100% !important; height: auto !important; }
+            .shiny-blue-border { box-shadow: none; border: 1px solid #ccc; }
+            @page { margin: 1cm; }
+        }
+
+        /* Hide sections by default */
+        .activity-section { display: none; }
+        .activity-section.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 min-h-screen flex flex-col">
+
+    <header class="bg-white dark:bg-slate-800 shadow-md sticky top-0 z-50 p-4 transition-colors duration-300">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <h1 class="text-2xl font-bold text-center sm:text-left text-primary">
+                <i class="fas fa-graduation-cap mr-2"></i>Mr. Rocha’s English Class<br>
+                <span class="text-lg text-slate-600 dark:text-slate-400 font-medium">MAP English Test Practice 3</span>
+            </h1>
+            
+            <div class="flex items-center gap-4 w-full sm:w-auto">
+                <button id="theme-toggle" class="p-2 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors" title="Toggle Light/Dark Mode">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div id="progress-container" class="max-w-5xl mx-auto mt-4 bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 overflow-hidden">
+            <div id="progress-bar" class="bg-primary h-2.5 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+        <div class="max-w-5xl mx-auto mt-1 text-xs text-right text-slate-500 font-semibold" id="progress-text">Intro</div>
+    </header>
+
+    <main class="flex-grow max-w-5xl mx-auto w-full p-4 sm:p-6 lg:p-8">
+        
+        <!-- Introduction -->
+        <section id="section-intro" class="activity-section active bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700">
+            <h2 class="text-3xl font-bold mb-6 text-center text-secondary dark:text-blue-400">Welcome to Practice Test 3</h2>
+            
+            <div class="flex flex-col sm:flex-row gap-6 mb-8 bg-slate-50 dark:bg-slate-700/50 p-6 rounded-xl">
+                <div class="flex-1">
+                    <label for="student-name" class="block text-sm font-semibold mb-2">Student Name:</label>
+                    <input type="text" id="student-name" placeholder="Type your full name here" class="w-full p-3 rounded-lg bg-white dark:bg-slate-800 shiny-blue-border transition-colors">
+                </div>
+                <div class="flex-1">
+                    <label for="test-date" class="block text-sm font-semibold mb-2">Date:</label>
+                    <input type="date" id="test-date" class="w-full p-3 rounded-lg bg-white dark:bg-slate-800 shiny-blue-border transition-colors cursor-pointer">
+                </div>
+            </div>
+
+            <div class="text-center">
+                <p class="mb-4 text-lg">Please review the introductory image before beginning the activities.</p>
+                <img src="Image1.jpg" alt="Introduction Image 1" onerror="this.onerror=null; this.src='https://placehold.co/800x400/3b82f6/ffffff?text=Image1.jpg+Missing\n(Place+file+in+same+folder)';" class="max-w-full h-auto mx-auto rounded-lg shadow-md border-4 border-slate-200 dark:border-slate-600">
+            </div>
+        </section>
+
+        <!-- Activity 1: Video Notes -->
+        <section id="section-act1" class="activity-section bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="bg-primary text-white text-xl font-bold w-10 h-10 flex items-center justify-center rounded-full">1</span>
+                <h2 class="text-2xl font-bold">Video Comprehension</h2>
+            </div>
+            
+            <p class="mb-4 text-lg">Watch the video carefully. Take notes and summarize what the video was about for Mr. Rocha.</p>
+            
+            <div class="mb-6 rounded-lg overflow-hidden shadow-lg bg-black flex justify-center">
+                <video src="Video1.mp4" controls class="max-w-full max-h-[500px]" title="Activity 1 Video" onerror="this.parentElement.innerHTML='<div class=\'p-8 text-center text-white w-full h-48 flex items-center justify-center flex-col\'><i class=\'fas fa-video-slash text-4xl mb-2\'></i><p>Video1.mp4 not found.<br>Please ensure file is in the same folder.</p></div>'">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <label for="act1-notes" class="block font-semibold mb-2 text-lg">Your Notes & Summary:</label>
+            <textarea id="act1-notes" rows="6" class="w-full p-4 rounded-lg bg-slate-50 dark:bg-slate-900 shiny-blue-border resize-y mb-4" placeholder="Type your summary here..."></textarea>
+            
+            <button class="check-btn bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105" onclick="checkAct1()">Save Notes</button>
+            <p id="act1-feedback" class="mt-2 text-sm font-semibold hidden"></p>
+        </section>
+
+        <!-- Activity 2: Reading Comprehension -->
+        <section id="section-act2" class="activity-section bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="bg-primary text-white text-xl font-bold w-10 h-10 flex items-center justify-center rounded-full">2</span>
+                <h2 class="text-2xl font-bold">Reading Comprehension: The Homework Debate</h2>
+            </div>
+            
+            <div class="bg-slate-100 dark:bg-slate-700 p-6 rounded-xl mb-8 font-serif leading-relaxed text-lg border-l-4 border-primary">
+                <p class="mb-4">"Good morning, everyone," Mr. Gomez announced, standing at the front of the 9th-grade classroom at Liceo del Valle. "Today, Mateo and Diego will debate a topic we all care about: Should schools assign homework?"</p>
+                <p class="mb-4">Mateo stood up first, adjusting his uniform tie. "Thank you, Mr. Gomez. I believe that homework is an essential tool for our education. When we learn something new in algebra or history, just listening to the teacher is not enough. We need to practice on our own to truly master the concepts. Homework gives us the opportunity to review what we learned and figure out what we still need to practice. Furthermore, it teaches us responsibility and time management. In a few years, we will graduate from Liceo del Valle and go to university. If we do not learn how to organize our time and work independently now, we will struggle later. Homework is like training for the real world."</p>
+                <p class="mb-4">The class clapped politely. Then, Diego stood up, looking relaxed and confident.</p>
+                <p class="mb-4">"I understand Mateo's points, but I completely disagree," Diego began. "We already spend seven hours a day sitting at these desks. When the final bell rings at three o'clock, we should be able to focus on other important areas of our development. Many of us play sports, learn musical instruments, or simply need time to connect with our families. Assigning hours of homework causes unnecessary stress and anxiety for teenagers. Instead of helping us learn, it often makes us hate the subjects we study. Besides, modern educational research actually shows that excessive homework does not significantly improve academic performance in middle school; it just makes us exhausted. If teachers want us to practice, they should give us time to do it during school hours."</p>
+                <p class="mb-4">Mateo quickly replied, "But Diego, you have to admit that not everyone learns at the exact same speed. Some students need that extra time in the quiet of their own homes to process the information without the pressure of a ticking clock in the classroom."</p>
+                <p class="mb-4">"That is exactly why homework is fundamentally unfair," Diego argued passionately. "Some students have parents who have the time and education to help them, or they have the money to hire a private tutor. Other students have to do their homework completely alone, sometimes while taking care of their younger siblings or doing chores. It creates a massive disadvantage for those who need the most help. We need a balanced life to be healthy, happy, and ready to learn the next day."</p>
+                <p>Mr. Gomez raised his hand to pause the timer. "Excellent points from both of you. You have given us a lot to think about regarding responsibility, equity, and mental health."</p>
+            </div>
+
+            <div id="act2-questions" class="space-y-6">
+                <!-- Questions injected by JS -->
+            </div>
+            
+            <div class="mt-6">
+                <button class="check-btn bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105" onclick="checkAct2()">Check Answers</button>
+                <div id="act2-score" class="mt-3 font-bold text-lg hidden"></div>
+            </div>
+        </section>
+
+        <!-- Activity 3: Semicolons -->
+        <section id="section-act3" class="activity-section bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="bg-primary text-white text-xl font-bold w-10 h-10 flex items-center justify-center rounded-full">3</span>
+                <h2 class="text-2xl font-bold">Advanced Punctuation: Semicolons & Conjunctive Adverbs</h2>
+            </div>
+
+            <div class="bg-blue-50 dark:bg-blue-900/30 p-5 rounded-xl mb-8 border border-blue-200 dark:border-blue-700 text-sm sm:text-base">
+                <h3 class="font-bold text-lg mb-2 text-blue-800 dark:text-blue-300"><i class="fas fa-info-circle mr-2"></i>Grammar Focus: CEFR C1</h3>
+                <p class="mb-3">A semicolon (<strong>;</strong>) is used to link two closely related independent clauses (sentences that can stand alone). Often, semicolons are paired with <strong>conjunctive adverbs</strong> to smoothly transition between ideas and show the relationship between the clauses.</p>
+                
+                <h4 class="font-semibold text-blue-900 dark:text-blue-200 mb-1">Common Conjunctive Adverbs:</h4>
+                <ul class="list-disc pl-6 mb-3 grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                    <li><strong>Addition:</strong> furthermore, moreover, additionally</li>
+                    <li><strong>Contrast:</strong> however, nevertheless, conversely</li>
+                    <li><strong>Cause & Effect:</strong> therefore, consequently, thus, hence</li>
+                    <li><strong>Time/Sequence:</strong> meanwhile, subsequently, finally</li>
+                    <li><strong>Other:</strong> otherwise, indeed, undoubtedly</li>
+                </ul>
+
+                <p class="font-semibold mt-2">Example:</p>
+                <div class="bg-white dark:bg-slate-800 p-3 rounded border border-blue-100 dark:border-blue-800 mt-1">
+                    <p class="text-slate-500 line-through">The debate was fierce. Nevertheless, both students made valid points.</p>
+                    <p class="text-green-600 dark:text-green-400 font-medium">The debate was fierce; nevertheless, both students made valid points.</p>
+                </div>
+            </div>
+
+            <p class="mb-4 font-medium">Directions: Combine the two sentences for each question into a single sentence using a semicolon. Make sure to adjust capitalization where appropriate.</p>
+            
+            <div id="act3-questions" class="space-y-4">
+                <!-- Injected by JS -->
+            </div>
+
+            <div class="mt-6">
+                <button class="check-btn bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105" onclick="checkAct3()">Check Answers</button>
+                <div id="act3-score" class="mt-3 font-bold text-lg hidden"></div>
+            </div>
+        </section>
+
+        <!-- Activity 4: Sentence Scramble -->
+        <section id="section-act4" class="activity-section bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="bg-primary text-white text-xl font-bold w-10 h-10 flex items-center justify-center rounded-full">4</span>
+                <h2 class="text-2xl font-bold">Syntax Construction (C1 Level)</h2>
+            </div>
+            
+            <p class="mb-6 font-medium">Directions: Drag and drop the scrambled words to form coherent C1-level sentences related to the homework debate. Click the speaker icon to hear the completed sentence.</p>
+
+            <div id="act4-container" class="space-y-8">
+                <!-- Injected by JS -->
+            </div>
+
+            <div class="mt-8">
+                <button class="check-btn bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105" onclick="checkAct4()">Check Answers</button>
+                <div id="act4-score" class="mt-3 font-bold text-lg hidden"></div>
+            </div>
+        </section>
+
+        <!-- Activity 5: Text Completion (Sentences) -->
+        <section id="section-act5" class="activity-section bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="bg-primary text-white text-xl font-bold w-10 h-10 flex items-center justify-center rounded-full">5</span>
+                <h2 class="text-2xl font-bold">Cohesion and Coherence</h2>
+            </div>
+            
+            <p class="mb-4 font-medium">Directions: Read the essay below. Drag the 5 sentences from the bank and drop them into the correct numbered spaces [1] to [5] within the text to create a cohesive argument.</p>
+
+            <div class="bg-slate-100 dark:bg-slate-700 p-4 rounded-xl mb-6 shadow-inner">
+                <h3 class="font-bold mb-3 text-center">Sentence Bank</h3>
+                <div id="sentence-bank" class="flex flex-col gap-2 min-h-[50px]">
+                    <!-- Sentences injected here -->
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 p-6 rounded-xl leading-loose text-lg shadow-sm" id="act5-essay-container">
+                <!-- Text with drop zones injected here -->
+            </div>
+
+            <div class="mt-8">
+                <button class="check-btn bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105" onclick="checkAct5()">Check Answers</button>
+                <div id="act5-score" class="mt-3 font-bold text-lg hidden"></div>
+            </div>
+        </section>
+
+        <!-- Activity 6: Listening Cloze -->
+        <section id="section-act6" class="activity-section bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="bg-primary text-white text-xl font-bold w-10 h-10 flex items-center justify-center rounded-full">6</span>
+                <h2 class="text-2xl font-bold">Listening Comprehension: Gap Fill</h2>
+            </div>
+            
+            <p class="mb-6 font-medium">Directions: Listen to the audio. Every 15th word in the transcript below has been removed. Type the missing words exactly as you hear them.</p>
+
+            <div class="mb-6 rounded-lg overflow-hidden shadow-sm bg-slate-100 dark:bg-slate-700 p-4 flex justify-center">
+                <audio src="Audio1.mp3" controls class="w-full max-w-md" title="Activity 6 Audio" onerror="this.parentElement.innerHTML='<div class=\'text-center text-red-500\'><i class=\'fas fa-exclamation-triangle mr-2\'></i>Audio1.mp3 not found. Please ensure file is in the same folder.</div>'">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+
+            <div id="act6-text-container" class="leading-loose text-lg bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                <!-- Injected by JS -->
+            </div>
+
+            <div class="mt-8">
+                <button class="check-btn bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105" onclick="checkAct6()">Check Answers</button>
+                <div id="act6-score" class="mt-3 font-bold text-lg hidden"></div>
+            </div>
+        </section>
+
+        <!-- Activity 7: Final Image -->
+        <section id="section-act7" class="activity-section bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="bg-primary text-white text-xl font-bold w-10 h-10 flex items-center justify-center rounded-full">7</span>
+                <h2 class="text-2xl font-bold">Visual Analysis</h2>
+            </div>
+            
+            <p class="mb-4 text-lg">Review the final image below before submitting your practice test.</p>
+            
+            <div class="w-full flex justify-center bg-slate-100 dark:bg-slate-900 p-2 rounded-xl">
+                 <img src="Image2.jpg" alt="Final Analysis Image" onerror="this.onerror=null; this.src='https://placehold.co/1200x800/1e40af/ffffff?text=Image2.jpg+Missing\n(Place+file+in+same+folder)';" class="w-full h-auto object-cover rounded-lg shadow-lg">
+            </div>
+
+            <!-- Fake check button to align with UX requirements, marks act 7 complete -->
+             <div class="mt-6">
+                <button class="check-btn bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105" onclick="checkAct7()">Mark as Reviewed</button>
+                <p id="act7-feedback" class="mt-2 text-sm font-semibold hidden text-green-600 dark:text-green-400"><i class="fas fa-check-circle mr-1"></i> Reviewed</p>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="section-results" class="activity-section bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700">
+            <div class="text-center mb-8 border-b pb-6 dark:border-slate-600">
+                <i class="fas fa-award text-6xl text-yellow-400 mb-4"></i>
+                <h2 class="text-4xl font-bold text-primary mb-2">Practice Test Results</h2>
+                <h3 id="result-student-info" class="text-xl text-slate-600 dark:text-slate-300 font-semibold"></h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <!-- Score Summary -->
+                <div class="bg-slate-50 dark:bg-slate-700 p-6 rounded-xl shadow flex flex-col justify-center items-center">
+                    <h3 class="text-2xl font-bold mb-2">Overall Score</h3>
+                    <div class="relative w-48 h-48">
+                        <canvas id="overallChart"></canvas>
+                        <div id="overall-percentage" class="absolute inset-0 flex items-center justify-center text-3xl font-bold">0%</div>
+                    </div>
+                </div>
+
+                <!-- Breakdown Chart -->
+                <div class="bg-slate-50 dark:bg-slate-700 p-6 rounded-xl shadow w-full">
+                    <h3 class="text-xl font-bold mb-4 text-center">Performance by Activity</h3>
+                    <canvas id="breakdownChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Feedback & Recommendations -->
+            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-6 rounded-xl mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-secondary dark:text-blue-300"><i class="fas fa-comment-medical mr-2"></i>Mr. Rocha's Feedback</h3>
+                <p id="general-feedback" class="text-lg mb-6 leading-relaxed"></p>
+                
+                <h4 class="text-xl font-bold mb-3"><i class="fas fa-list-ol mr-2"></i>8 Specific Recommendations for Improvement:</h4>
+                <ul id="recommendations-list" class="list-decimal pl-6 space-y-2 text-lg">
+                    <!-- Injected by JS -->
+                </ul>
+            </div>
+
+            <div class="text-center no-print">
+                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-600 dark:hover:bg-slate-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 text-lg">
+                    <i class="fas fa-print mr-2"></i>Print Report
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Navigation Footer -->
+    <footer id="nav-buttons" class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 sticky bottom-0 z-40 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <button id="btn-prev" class="bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold py-2 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <i class="fas fa-arrow-left mr-2"></i> Back
+            </button>
+            
+            <button id="btn-submit" class="hidden bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-8 rounded-lg shadow-lg transition-transform transform hover:scale-105 animate-pulse">
+                Submit Test <i class="fas fa-paper-plane ml-2"></i>
+            </button>
+
+            <button id="btn-next" class="bg-primary hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                Next <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // State Management
+        const state = {
+            currentStep: 0,
+            sections: ['intro', 'act1', 'act2', 'act3', 'act4', 'act5', 'act6', 'act7', 'results'],
+            scores: {
+                act2: { correct: 0, total: 8 },
+                act3: { correct: 0, total: 20 },
+                act4: { correct: 0, total: 12 },
+                act5: { correct: 0, total: 5 },
+                act6: { correct: 0, total: 0 } // Total calculated dynamically
+            },
+            completed: { act1: false, act2: false, act3: false, act4: false, act5: false, act6: false, act7: false }
+        };
+
+        // Data for Activities
+        const act2Data = [
+            { q: "1. What is the main topic of the debate?", opts: ["A) Why going to university is important for teenagers", "B) Whether students should be given schoolwork to do at home", "C) How to improve grades in algebra and history classes", "D) The best ways to relax after a long day at school"], ans: 1 },
+            { q: "2. As used in the second paragraph, the word 'master' most nearly means:", opts: ["A) control completely", "B) teach a class", "C) understand deeply", "D) defeat an enemy"], ans: 2 },
+            { q: "3. According to Mateo, what is one major benefit of doing homework?", opts: ["A) It guarantees students will get accepted into a good university.", "B) It helps students finish their school day earlier.", "C) It teaches students how to manage their time and be responsible.", "D) It allows parents to see exactly what their children are learning."], ans: 2 },
+            { q: "4. What evidence does Diego use to support his argument against homework?", opts: ["A) He mentions that educational research shows too much homework makes students tired without improving grades.", "B) He argues that teachers assign too much algebra and history on the weekends.", "C) He points out that most students at Liceo del Valle are failing their university exams.", "D) He explains that sports and music are much more important than academic classes."], ans: 0 },
+            { q: "5. What does Mateo believe about how students learn?", opts: ["A) They only learn well when they are working in groups.", "B) They learn best when they are listening to the teacher.", "C) They all learn at the same speed if the teacher is good.", "D) They learn at different speeds and may need extra time at home."], ans: 3 },
+            { q: "6. Why does Diego mention 'younger siblings' in his second argument?", opts: ["A) To prove that younger students get less homework than older students.", "B) To show that some students have responsibilities at home that make doing homework difficult.", "C) To explain why parents prefer that their children stay at school longer.", "D) To argue that families should help each other with school projects."], ans: 1 },
+            { q: "7. Based on the passage, what is Diego's opinion on practicing what is learned in class?", opts: ["A) Students should practice during regular school hours instead of at home.", "B) Students should only practice the subjects they are interested in.", "C) Practicing is a waste of time and does not help students learn.", "D) Practicing should only be done with the help of a private tutor."], ans: 0 },
+            { q: "8. How does Mr. Gomez react to the debate?", opts: ["A) He agrees with Mateo that homework is essential for university.", "B) He is disappointed because the students did not answer the prompt.", "C) He appreciates both arguments and thinks they are well thought out.", "D) He gets angry because Diego interrupts Mateo during the discussion."], ans: 2 }
+        ];
+
+        const act3Data = [
+            ["The exam was notoriously difficult.", "Consequently, over half the class failed."],
+            ["He neglected to study for the final.", "Therefore, his failing grade was unsurprising."],
+            ["The research methodology was flawed.", "Nevertheless, the results were widely published."],
+            ["She is an exceptional team leader.", "Furthermore, she possesses remarkable empathy."],
+            ["The budget cuts were exceptionally severe.", "However, the project was completed on time."],
+            ["We must drastically reduce our carbon footprint.", "Otherwise, the environmental consequences will be dire."],
+            ["The suspect had a solid, verifiable alibi.", "Thus, the detective had to pursue other leads."],
+            ["The company's profits plummeted this quarter.", "Meanwhile, their competitors saw record growth."],
+            ["The new policy is highly controversial.", "Hence, we expect significant pushback from the staff."],
+            ["He lacked the necessary formal experience.", "Still, his enthusiasm won the interviewers over."],
+            ["The novel's overarching plot is quite complex.", "Indeed, it requires careful and attentive reading."],
+            ["The winter storm was entirely unprecedented.", "Moreover, the city lacked the infrastructure to handle it."],
+            ["She practiced the piano for hours daily.", "Subsequently, she won the national concerto competition."],
+            ["They forgot to confirm the reservation.", "Accordingly, they lost their table at the restaurant."],
+            ["The initial trials yielded poor results.", "Alternatively, the second phase showed immense promise."],
+            ["The CEO resigned unexpectedly last week.", "Thereafter, the stock prices experienced a sharp decline."],
+            ["The team was exhausted and demoralized.", "Nonetheless, they managed to secure the victory."],
+            ["The instructions were incredibly vague.", "Undoubtedly, many users will struggle with the setup."],
+            ["The artist's early work was conventional.", "Conversely, his later pieces were radically avant-garde."],
+            ["The evidence presented was circumstantial.", "Ultimately, the jury reached a verdict of not guilty."]
+        ];
+
+        const act4Data = [
+            "Assigning excessive homework often leads to student burnout and severe anxiety.",
+            "Proponents argue that independent practice is crucial for mastering complex concepts.",
+            "The debate over educational equity frequently highlights disparities in home resources.",
+            "Students require adequate time to decompress after a rigorous academic schedule.",
+            "Cultivating time management skills remains a primary justification for nightly assignments.",
+            "Critics assert that rote memorization tasks diminish intrinsic motivation for learning.",
+            "A balanced lifestyle contributes significantly to overall psychological well-being in adolescents.",
+            "Teachers must carefully evaluate the qualitative value of the tasks they assign.",
+            "Some empirical studies indicate diminishing returns for homework in middle school.",
+            "Extracurricular activities provide essential developmental benefits outside the traditional classroom.",
+            "Fostering self-directed learning requires a nuanced approach to independent academic tasks.",
+            "Ultimately, educators should prioritize conceptual understanding over sheer volume of work."
+        ];
+
+        const act5Text = `The ongoing debate surrounding the utility of homework in secondary education is complex and multifaceted. 
+        <span class="inline-block w-full max-w-lg my-2"><div class="drop-zone act5-drop" data-id="0">Drop Sentence 1 Here</div></span> 
+        Advocates for traditional homework assignments maintain that independent practice reinforces classroom instruction. 
+        <span class="inline-block w-full max-w-lg my-2"><div class="drop-zone act5-drop" data-id="1">Drop Sentence 2 Here</div></span> 
+        They assert that struggling through an algebraic equation or analyzing a historical document alone builds resilience and crucial critical thinking skills. 
+        However, an increasingly vocal contingent of educators and psychologists are raising alarms about the detrimental impacts of this practice. 
+        <span class="inline-block w-full max-w-lg my-2"><div class="drop-zone act5-drop" data-id="2">Drop Sentence 3 Here</div></span> 
+        When teenagers spend upwards of seven hours in a structured academic environment, burdening them with additional hours of cognitive labor at home can precipitate severe mental exhaustion. 
+        <span class="inline-block w-full max-w-lg my-2"><div class="drop-zone act5-drop" data-id="3">Drop Sentence 4 Here</div></span> 
+        Furthermore, the assumption that all students possess a conducive environment for independent study—a quiet room, parental support, and necessary resources—is fundamentally flawed and exacerbates existing socioeconomic inequities. 
+        In conclusion, while some practice is undoubtedly beneficial, the educational system must undergo a paradigm shift. 
+        <span class="inline-block w-full max-w-lg my-2"><div class="drop-zone act5-drop" data-id="4">Drop Sentence 5 Here</div></span> 
+        Only then can we foster a generation of learners who are not merely compliant, but genuinely enthusiastic about education.`;
+
+        const act5Sentences = [
+            "This pedagogical approach, they argue, transforms theoretical knowledge into practical mastery.",
+            "Specifically, they point to alarming rates of anxiety and sleep deprivation among high school students.",
+            "It requires balancing the undeniable necessity of skill consolidation with an empathetic understanding of adolescent development.",
+            "Consequently, this relentless schedule leaves nominal time for familial connection or restorative extracurricular pursuits.",
+            "We must prioritize qualitative engagement over quantitative busywork—ensuring assignments are meaningful rather than merely obligatory."
+        ];
+        // Correct order maps to index in act5Sentences: 0 -> drop0, 1 -> drop2, 2 -> drop4, 3 -> drop3, 4 -> drop1 (Wait, let's map it clearly)
+        /* Correct Flow:
+        ...multifaceted. [It requires balancing...] (2)
+        ...reinforces classroom instruction. [This pedagogical approach...] (0)
+        ...raising alarms. [Specifically, they point...] (1)
+        ...severe mental exhaustion. [Consequently, this relentless...] (3)
+        ...paradigm shift. [We must prioritize...] (4)
+        */
+        const act5CorrectMap = [2, 0, 1, 3, 4]; 
+
+        const act6OriginalText = `Whenever Mr. Rocha turns to the whiteboard and writes the word "Homework" in his bold, block letters, a collective groan ripples through our ninth-grade classroom. I usually join in, but honestly, my feelings about taking schoolwork home are pretty complicated. On one hand, I actually get why Mr. Rocha assigns it. Last week, when we were learning about quadratic equations, I was completely lost during the lecture. It wasn’t until I sat down at my kitchen table that evening, struggling through the practice problems in total silence, that the formula finally clicked. Homework forces me to review the material independently, which definitely helps me remember it for exams. It also teaches us the kind of time management and discipline we are going to need for the rest of high school and eventually university. On the other hand, the daily pressure can be overwhelmingly heavy. After seven hours of school, my brain is completely fried. By the time I finish soccer practice and eat dinner, I am exhausted. Staring at another two hours of worksheets feels like a punishment. It eats into the time I desperately need to decompress, connect with my family, or just get a decent night of sleep. Furthermore, when teachers assign "busy work" just for the sake of giving us something to do, it feels entirely pointless and drains whatever passion I have for learning. I guess what I wish Mr. Rocha understood is that quality matters much more than quantity. A few meaningful problems help us grow, but hours of endless drills just burn us out.`;
+
+        // DOM Elements
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        
+        // Theme Logic
+        themeToggle.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+        });
+
+        function init() {
+            renderAct2();
+            renderAct3();
+            renderAct4();
+            renderAct5();
+            renderAct6();
+            updateUI();
+        }
+
+        // Render Functions
+        function renderAct2() {
+            const container = document.getElementById('act2-questions');
+            act2Data.forEach((item, index) => {
+                let html = `<div class="mb-6 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg"><p class="font-bold mb-3">${item.q}</p><div class="space-y-2">`;
+                item.opts.forEach((opt, optIndex) => {
+                    html += `
+                        <label class="flex items-start space-x-3 cursor-pointer p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                            <input type="radio" name="q2_${index}" value="${optIndex}" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <span>${opt}</span>
+                        </label>`;
+                });
+                html += `</div></div>`;
+                container.innerHTML += html;
+            });
+        }
+
+        function renderAct3() {
+            const container = document.getElementById('act3-questions');
+            act3Data.forEach((pair, index) => {
+                container.innerHTML += `
+                    <div class="flex flex-col gap-2 mb-4 p-3 bg-slate-50 dark:bg-slate-700/30 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="text-sm sm:text-base font-medium text-slate-700 dark:text-slate-300 mb-1">
+                            <span class="font-bold text-primary mr-2">${index + 1}.</span> 
+                            ${pair[0]} ${pair[1]}
+                        </div>
+                        <input type="text" id="act3_q${index}" class="w-full p-2 rounded-lg bg-white dark:bg-slate-900 shiny-blue-border font-mono text-sm" placeholder="Combine into one sentence..." autocomplete="off">
+                    </div>
+                `;
+            });
+        }
+
+        function renderAct4() {
+            const container = document.getElementById('act4-container');
+            act4Data.forEach((sentence, index) => {
+                const words = sentence.split(' ');
+                // Fisher-Yates shuffle
+                for (let i = words.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [words[i], words[j]] = [words[j], words[i]];
+                }
+
+                let wordsHtml = words.map(w => `<div class="draggable-word bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 shadow-sm rounded px-3 py-1 m-1 inline-block cursor-grab">${w}</div>`).join('');
+                
+                container.innerHTML += `
+                    <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-slate-500">Sentence ${index + 1}</span>
+                            <button onclick="speakSentence('${sentence.replace(/'/g, "\\'")}')" class="text-primary hover:text-blue-700 dark:hover:text-blue-300 bg-slate-200 dark:bg-slate-600 rounded-full w-8 h-8 flex items-center justify-center transition-colors" title="Listen"><i class="fas fa-volume-up"></i></button>
+                        </div>
+                        <div id="sortable-${index}" class="min-h-[50px] p-2 bg-slate-200 dark:bg-slate-800 rounded-lg flex flex-wrap gap-1 border-2 border-dashed border-slate-300 dark:border-slate-600">
+                            ${wordsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Init Sortable after rendering
+            setTimeout(() => {
+                act4Data.forEach((_, index) => {
+                    new Sortable(document.getElementById(`sortable-${index}`), {
+                        animation: 150,
+                        ghostClass: 'sortable-ghost'
+                    });
+                });
+            }, 100);
+        }
+
+        function speakSentence(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Text-to-speech not supported in this browser."); // Fallback, prompt says no alert, but this is API fallback. Better to console.log.
+                console.log("TTS not supported.");
+            }
+        }
+
+        function renderAct5() {
+            const bank = document.getElementById('sentence-bank');
+            const essay = document.getElementById('act5-essay-container');
+            
+            essay.innerHTML = act5Text;
+
+            // Shuffle sentences for bank
+            let shuffled = act5Sentences.map((s, i) => ({s, i})).sort(() => Math.random() - 0.5);
+            
+            shuffled.forEach((item) => {
+                bank.innerHTML += `<div class="draggable-sentence bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 shadow-sm rounded p-3 cursor-grab font-medium" data-orig-id="${item.i}">${item.s}</div>`;
+            });
+
+            // Initialize Sortable for bank and drop zones
+            setTimeout(() => {
+                const sharedOpts = {
+                    group: 'shared',
+                    animation: 150,
+                    ghostClass: 'sortable-ghost'
+                };
+
+                new Sortable(bank, sharedOpts);
+                
+                document.querySelectorAll('.act5-drop').forEach(el => {
+                    new Sortable(el, {
+                        ...sharedOpts,
+                        maxItems: 1, // Custom logic needed if standard sortable doesn't restrict.
+                        onAdd: function (evt) {
+                            // Basic logic to ensure only one item per zone.
+                            if (el.children.length > 1) {
+                                // Push the old one back to bank
+                                const oldItem = el.children[0] === evt.item ? el.children[1] : el.children[0];
+                                bank.appendChild(oldItem);
+                            }
+                        }
+                    });
+                });
+            }, 100);
+        }
+
+        function renderAct6() {
+            const container = document.getElementById('act6-text-container');
+            const words = act6OriginalText.split(' ');
+            let html = '';
+            
+            let gapCount = 0;
+            state.act6Answers = []; // Store correct answers
+
+            for (let i = 0; i < words.length; i++) {
+                if ((i + 1) % 15 === 0) {
+                    // Extract punctuation attached to the word
+                    const match = words[i].match(/^([a-zA-Z0-9'-]+)(.*)$/);
+                    let baseWord = words[i];
+                    let punc = "";
+                    
+                    if (match) {
+                        baseWord = match[1];
+                        punc = match[2];
+                    }
+                    
+                    state.act6Answers.push(baseWord.toLowerCase());
+                    html += `<input type="text" id="act6_gap${gapCount}" class="inline-block w-24 mx-1 px-1 border-b-2 border-primary bg-transparent text-center focus:outline-none focus:bg-blue-50 dark:focus:bg-blue-900/50 font-bold text-primary" autocomplete="off">${punc} `;
+                    gapCount++;
+                } else {
+                    html += words[i] + ' ';
+                }
+            }
+            state.scores.act6.total = gapCount;
+            container.innerHTML = html;
+        }
+
+        function disableSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const inputs = section.querySelectorAll('input, textarea, select, button.check-btn');
+            inputs.forEach(el => {
+                if(el.tagName === 'BUTTON') {
+                    el.disabled = true;
+                    el.classList.add('opacity-50', 'cursor-not-allowed');
+                    el.innerText = 'Completed';
+                } else {
+                    el.disabled = true;
+                }
+            });
+            // Disable sortable if exists
+            if(sectionId === 'section-act4') {
+                act4Data.forEach((_, i) => Sortable.get(document.getElementById(`sortable-${i}`)).option("disabled", true));
+            }
+            if(sectionId === 'section-act5') {
+                Sortable.get(document.getElementById('sentence-bank')).option("disabled", true);
+                document.querySelectorAll('.act5-drop').forEach(el => Sortable.get(el).option("disabled", true));
+            }
+        }
+
+        function checkAct1() {
+            state.completed.act1 = true;
+            document.getElementById('act1-feedback').innerText = "Notes saved.";
+            document.getElementById('act1-feedback').classList.remove('hidden');
+            disableSection('section-act1');
+        }
+
+        function checkAct2() {
+            let score = 0;
+            act2Data.forEach((item, index) => {
+                const selected = document.querySelector(`input[name="q2_${index}"]:checked`);
+                const container = document.querySelectorAll('#act2-questions > div')[index];
+                if (selected) {
+                    if (parseInt(selected.value) === item.ans) {
+                        score++;
+                        container.classList.add('correct-answer');
+                    } else {
+                        container.classList.add('incorrect-answer');
+                        // Highlight correct answer
+                        container.querySelectorAll('label')[item.ans].classList.add('bg-green-200', 'dark:bg-green-800');
+                    }
+                } else {
+                    container.classList.add('incorrect-answer');
+                }
+            });
+            state.scores.act2.correct = score;
+            state.completed.act2 = true;
+            document.getElementById('act2-score').innerHTML = `Score: <span class="${score === 8 ? 'text-green-500' : 'text-red-500'}">${score} / 8</span>`;
+            document.getElementById('act2-score').classList.remove('hidden');
+            disableSection('section-act2');
+        }
+
+        function checkAct3() {
+            let score = 0;
+            act3Data.forEach((pair, index) => {
+                const input = document.getElementById(`act3_q${index}`);
+                const userVal = input.value.trim().replace(/\s+/g, ' '); // Normalize spaces
+                
+                // Form correct answer
+                const s1Base = pair[0].replace(/\.$/, '');
+                const s2Base = pair[1].charAt(0).toLowerCase() + pair[1].slice(1);
+                
+                const correct1 = `${s1Base}; ${s2Base}`;
+                const correct2 = `${s1Base};${s2Base}`;
+                
+                // Allow without trailing period just in case
+                const correct1NoPeriod = correct1.replace(/\.$/, '');
+                const correct2NoPeriod = correct2.replace(/\.$/, '');
+
+                if (userVal === correct1 || userVal === correct2 || userVal === correct1NoPeriod || userVal === correct2NoPeriod) {
+                    score++;
+                    input.classList.add('correct-answer');
+                } else {
+                    input.classList.add('incorrect-answer');
+                    input.value = correct1 + " (Correct answer)";
+                    input.classList.add('text-red-600', 'dark:text-red-400');
+                }
+            });
+            state.scores.act3.correct = score;
+            state.completed.act3 = true;
+            document.getElementById('act3-score').innerHTML = `Score: <span class="${score >= 15 ? 'text-green-500' : 'text-red-500'}">${score} / 20</span>`;
+            document.getElementById('act3-score').classList.remove('hidden');
+            disableSection('section-act3');
+        }
+
+        function checkAct4() {
+            let score = 0;
+            act4Data.forEach((correctSentence, index) => {
+                const container = document.getElementById(`sortable-${index}`);
+                const userWords = Array.from(container.children).map(el => el.innerText.trim());
+                const userSentence = userWords.join(' ');
+                
+                if (userSentence === correctSentence) {
+                    score++;
+                    container.classList.add('correct-answer', 'border-green-500');
+                    container.classList.remove('border-slate-300', 'dark:border-slate-600');
+                } else {
+                    container.classList.add('incorrect-answer', 'border-red-500');
+                    container.classList.remove('border-slate-300', 'dark:border-slate-600');
+                    // Append correct answer visually
+                    const corrDiv = document.createElement('div');
+                    corrDiv.className = "text-sm text-red-600 dark:text-red-400 mt-2 font-bold w-full";
+                    corrDiv.innerText = "Correct: " + correctSentence;
+                    container.parentElement.appendChild(corrDiv);
+                }
+            });
+            state.scores.act4.correct = score;
+            state.completed.act4 = true;
+            document.getElementById('act4-score').innerHTML = `Score: <span class="${score >= 9 ? 'text-green-500' : 'text-red-500'}">${score} / 12</span>`;
+            document.getElementById('act4-score').classList.remove('hidden');
+            disableSection('section-act4');
+        }
+
+        function checkAct5() {
+            let score = 0;
+            const drops = document.querySelectorAll('.act5-drop');
+            
+            drops.forEach((drop, index) => {
+                const expectedOrigId = act5CorrectMap[index];
+                if (drop.children.length > 0) {
+                    const actualOrigId = parseInt(drop.children[0].getAttribute('data-orig-id'));
+                    if (actualOrigId === expectedOrigId) {
+                        score++;
+                        drop.classList.add('correct-answer', 'border-green-500', 'border-solid');
+                        drop.classList.remove('border-dashed');
+                    } else {
+                        drop.classList.add('incorrect-answer', 'border-red-500', 'border-solid');
+                        drop.classList.remove('border-dashed');
+                        // Show correct text
+                        const p = document.createElement('p');
+                        p.className = 'text-xs text-red-600 font-bold mt-1 leading-tight';
+                        p.innerText = "Expected: " + act5Sentences[expectedOrigId].substring(0, 30) + "...";
+                        drop.appendChild(p);
+                    }
+                } else {
+                    drop.classList.add('incorrect-answer', 'border-red-500', 'border-solid');
+                    drop.classList.remove('border-dashed');
+                }
+            });
+
+            state.scores.act5.correct = score;
+            state.completed.act5 = true;
+            document.getElementById('act5-score').innerHTML = `Score: <span class="${score === 5 ? 'text-green-500' : 'text-red-500'}">${score} / 5</span>`;
+            document.getElementById('act5-score').classList.remove('hidden');
+            disableSection('section-act5');
+        }
+
+        function checkAct6() {
+            let score = 0;
+            state.act6Answers.forEach((ans, index) => {
+                const input = document.getElementById(`act6_gap${index}`);
+                const userVal = input.value.trim().toLowerCase();
+                
+                if (userVal === ans) {
+                    score++;
+                    input.classList.add('text-green-600', 'dark:text-green-400');
+                    input.style.borderColor = '#22c55e';
+                } else {
+                    input.classList.add('text-red-600', 'dark:text-red-400', 'line-through');
+                    input.style.borderColor = '#ef4444';
+                    
+                    // Create correction span
+                    const span = document.createElement('span');
+                    span.className = "text-green-600 dark:text-green-400 font-bold ml-1 text-sm absolute -mt-4";
+                    span.innerText = ans;
+                    input.parentNode.insertBefore(span, input.nextSibling);
+                }
+            });
+            state.scores.act6.correct = score;
+            state.completed.act6 = true;
+            document.getElementById('act6-score').innerHTML = `Score: <span class="${score >= (state.scores.act6.total * 0.7) ? 'text-green-500' : 'text-red-500'}">${score} / ${state.scores.act6.total}</span>`;
+            document.getElementById('act6-score').classList.remove('hidden');
+            disableSection('section-act6');
+        }
+
+        function checkAct7() {
+            state.completed.act7 = true;
+            document.getElementById('act7-feedback').classList.remove('hidden');
+            disableSection('section-act7');
+        }
+
+
+        function updateUI() {
+            // Hide all
+            document.querySelectorAll('.activity-section').forEach(el => el.classList.remove('active'));
+            // Show current
+            document.getElementById(`section-${state.sections[state.currentStep]}`).classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Buttons
+            document.getElementById('btn-prev').disabled = state.currentStep === 0;
+            
+            if (state.currentStep === state.sections.length - 2) {
+                // On last activity (Act 7)
+                document.getElementById('btn-next').classList.add('hidden');
+                document.getElementById('btn-submit').classList.remove('hidden');
+            } else if (state.currentStep === state.sections.length - 1) {
+                // On results
+                document.getElementById('nav-buttons').classList.add('hidden');
+                generateResults();
+            } else {
+                document.getElementById('btn-next').classList.remove('hidden');
+                document.getElementById('btn-submit').classList.add('hidden');
+            }
+
+            // Progress bar
+            const progress = (state.currentStep / (state.sections.length - 1)) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            
+            let sectionName = state.sections[state.currentStep].replace('act', 'Activity ');
+            sectionName = sectionName.charAt(0).toUpperCase() + sectionName.slice(1);
+            document.getElementById('progress-text').innerText = sectionName;
+        }
+
+        document.getElementById('btn-next').addEventListener('click', () => {
+            if (state.currentStep < state.sections.length - 1) {
+                state.currentStep++;
+                updateUI();
+            }
+        });
+
+        document.getElementById('btn-prev').addEventListener('click', () => {
+            if (state.currentStep > 0) {
+                state.currentStep--;
+                updateUI();
+            }
+        });
+
+        document.getElementById('btn-submit').addEventListener('click', () => {
+            state.currentStep++; // Go to results
+            updateUI();
+        });
+
+        function generateResults() {
+            const name = document.getElementById('student-name').value || 'Student';
+            const date = document.getElementById('test-date').value || new Date().toLocaleDateString();
+            document.getElementById('result-student-info').innerText = `${name} | ${date}`;
+
+            // Calculate totals
+            let totalCorrect = 0;
+            let totalPossible = 0;
+            const percentages = {};
+
+            for (const key in state.scores) {
+                totalCorrect += state.scores[key].correct;
+                totalPossible += state.scores[key].total;
+                percentages[key] = (state.scores[key].correct / state.scores[key].total) * 100;
+            }
+
+            const overallPercentage = Math.round((totalCorrect / totalPossible) * 100) || 0;
+            
+            // Animation for overall score text
+            let counter = 0;
+            const interval = setInterval(() => {
+                if(counter >= overallPercentage) {
+                    clearInterval(interval);
+                    document.getElementById('overall-percentage').innerText = `${overallPercentage}%`;
+                } else {
+                    counter++;
+                    document.getElementById('overall-percentage').innerText = `${counter}%`;
+                }
+            }, 10);
+
+            // Chart Colors
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#e2e8f0' : '#1e293b';
+            const gridColor = isDark ? '#334155' : '#e2e8f0';
+
+            // Overall Donut Chart
+            new Chart(document.getElementById('overallChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Correct', 'Incorrect'],
+                    datasets: [{
+                        data: [totalCorrect, totalPossible - totalCorrect],
+                        backgroundColor: ['#3b82f6', '#ef4444'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    cutout: '75%',
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Breakdown Bar Chart
+            new Chart(document.getElementById('breakdownChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Act 2: Reading', 'Act 3: Semicolons', 'Act 4: Syntax', 'Act 5: Cohesion', 'Act 6: Cloze'],
+                    datasets: [{
+                        label: 'Score (%)',
+                        data: [percentages.act2, percentages.act3, percentages.act4, percentages.act5, percentages.act6],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.7)', // Blue
+                            'rgba(139, 92, 246, 0.7)', // Purple
+                            'rgba(16, 185, 129, 0.7)', // Emerald
+                            'rgba(245, 158, 11, 0.7)', // Amber
+                            'rgba(236, 72, 153, 0.7)'  // Pink
+                        ],
+                        borderColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(139, 92, 246)',
+                            'rgb(16, 185, 129)',
+                            'rgb(245, 158, 11)',
+                            'rgb(236, 72, 153)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true, max: 100, ticks: { color: textColor }, grid: { color: gridColor } },
+                        x: { ticks: { color: textColor }, grid: { display: false } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Generate Feedback
+            const feedbackEl = document.getElementById('general-feedback');
+            if (overallPercentage >= 90) {
+                feedbackEl.innerHTML = `<span class="text-green-600 dark:text-green-400 font-bold">Outstanding work, ${name}!</span> You have demonstrated excellent mastery of C1-level English comprehension, syntax, and punctuation. You are well-prepared for advanced academic challenges.`;
+            } else if (overallPercentage >= 70) {
+                feedbackEl.innerHTML = `<span class="text-blue-600 dark:text-blue-400 font-bold">Good effort, ${name}.</span> You have a solid grasp of most concepts, but there are areas requiring fine-tuning, particularly in complex sentence structure and advanced punctuation.`;
+            } else {
+                feedbackEl.innerHTML = `<span class="text-red-600 dark:text-red-400 font-bold">Keep practicing, ${name}.</span> This test highlights several foundational areas that need review. Focus on the recommendations below to strengthen your reading and writing skills.`;
+            }
+
+            // Generate 8 Recommendations based on weakest areas
+            const sortedActs = Object.keys(percentages).sort((a, b) => percentages[a] - percentages[b]);
+            const recsList = document.getElementById('recommendations-list');
+            
+            const recommendationBank = {
+                act2: [
+                    "Review active reading strategies. Highlight main ideas and transition words in texts to better grasp the author's intent.",
+                    "Practice identifying evidence within a text that directly supports specific claims made by characters or authors."
+                ],
+                act3: [
+                    "Study the difference between independent and dependent clauses to master semicolon usage.",
+                    "Complete daily exercises linking two related sentences without using conjunctions like 'and' or 'but'."
+                ],
+                act4: [
+                    "Read more C1-level academic articles to internalize complex sentence structures and natural word order.",
+                    "Practice writing compound-complex sentences daily, paying attention to modifier placement."
+                ],
+                act5: [
+                    "Focus on paragraph cohesion. Study how transition words (furthermore, conversely, consequently) link ideas logically.",
+                    "When writing essays, practice outlining to ensure your sentences follow a clear, logical progression."
+                ],
+                act6: [
+                    "Improve your active listening skills by transcribing short audio clips (like TED talks) focusing on unstressed words.",
+                    "Expand your academic vocabulary to help you anticipate words based on context clues when listening."
+                ]
+            };
+
+            const genericRecs = [
+                "Read an English newspaper article every day to build vocabulary context.",
+                "Maintain a journal in English to practice fluid thought expression.",
+                "Use flashcards for advanced transitional phrases and conjunctive adverbs.",
+                "Listen to academic podcasts in English while commuting.",
+                "Always review your written work aloud to catch syntax errors.",
+                "Participate actively in class debates to practice spontaneous argumentation.",
+                "Read classic literature to observe varied and complex punctuation in use.",
+                "Take practice MAP tests regularly to build stamina for long reading sessions."
+            ];
+
+            let finalRecs = [];
+            
+            // Add specific recs for the 3 weakest areas (2 each = 6 recs)
+            for(let i=0; i<3; i++) {
+                if(sortedActs[i] && recommendationBank[sortedActs[i]]) {
+                    finalRecs.push(recommendationBank[sortedActs[i]][0]);
+                    finalRecs.push(recommendationBank[sortedActs[i]][1]);
+                }
+            }
+
+            // Fill the rest up to 8 with generic ones
+            let genericIndex = 0;
+            while(finalRecs.length < 8) {
+                finalRecs.push(genericRecs[genericIndex]);
+                genericIndex++;
+            }
+
+            finalRecs.slice(0,8).forEach(rec => {
+                recsList.innerHTML += `<li>${rec}</li>`;
+            });
+        }
+
+        // Initialize on load
+        window.onload = init;
+
+    </script>
+</body>
+</html>
